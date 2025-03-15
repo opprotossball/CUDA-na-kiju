@@ -79,13 +79,14 @@ class GameState:
     
     Example usage:
     state = GameState(obs)
-    game_map, current_state, is_base_attacked = state.return_state()
+    game_map, current_state, base_status = state.return_state()
     
     """
     
-    def __init__(self, observation: dict, previous_state=None):
+    def __init__(self, observation: dict, previous_state=None, side=0):
         """Load the previous game state"""
         self.previous_state = previous_state
+        self.side = side
 
         """Initialize state from observation dictionary"""
         self.game_map = observation.get("map", [])
@@ -122,10 +123,16 @@ class GameState:
             "planets_occupation": [planet.to_tuple() for planet in self.planets],
             "resources": self.resources
         }
-        is_base_attacked = False
+        base_status = 1 # 1: base is 100% hp, -1: base was just attacked, 0: base is less than 100% hp, but the hp didn't change
         if self.previous_state is not None:
             for planet in self.previous_state["planets_occupation"]:
-                if planet[0] == 90 and planet[1] == 90:
-                    if planet[2] - current_state["planets_occupation"][0][2] > 0:
-                        is_base_attacked = True
-        return self.updating_map, current_state, is_base_attacked
+                base_coords = 9 if self.side == 0 else 90
+                if planet[0] == base_coords and planet[1] == base_coords:
+                    current_base_hp = current_state["planets_occupation"][0][2]
+                    previous_base_hp = planet[2]
+                    if previous_base_hp - current_base_hp > 0:
+                        base_status = -1
+                    elif current_base_hp < 100:
+                        base_status = 0
+                    
+        return self.updating_map, current_state, base_status
