@@ -47,7 +47,7 @@ class Agent:
 
         return {
             "ships_actions": [],
-            "construction": 0
+            "construction": 1
         }
 
 

@@ -7,16 +7,17 @@ def enemy_home(home):
 class Agent:
     def __init__(self):
         self.target = None
+        self.turn = 0
 
     def get_action(self, obs: dict) -> dict:
+        self.turn += 1
         if self.target is None:
             self.target = enemy_home(obs["planets_occupation"][0][0])
         ship_actions = []
-        ships_sent = 0
+        #ships_sent = 0
         for ship in obs["allied_ships"]:
             # aggro
-            if ships_sent < 1:
-                ships_sent += 1
+            if self.turn >= 777:
                 direction = 0
                 ship_x = ship[1]
                 ship_y = ship[2]
