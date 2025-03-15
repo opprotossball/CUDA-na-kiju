@@ -1,6 +1,9 @@
 # Skeleton for Agent class
 
 class Agent:
+    def __init__(self, side):
+        pass
+    
     def get_action(self, obs: dict) -> dict:
         """
         Main function, which gets called during step() of the environment.

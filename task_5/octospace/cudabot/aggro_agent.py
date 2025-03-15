@@ -5,7 +5,8 @@ def enemy_home(home):
     return 9 if home == 90 else 90
 
 class Agent:
-    def __init__(self):
+    def __init__(self, side):
+        self.side = side
         self.target = None
         
     def get_action(self, obs: dict) -> dict:

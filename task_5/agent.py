@@ -1,6 +1,11 @@
 # Skeleton for Agent class
 
 class Agent:
+    def __init__(self, side: int):
+        self.side = side
+        self.target = None
+        self.turn = 0
+        
     def get_action(self, obs: dict) -> dict:
         """
         Main function, which gets called during step() of the environment.
