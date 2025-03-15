@@ -1,9 +1,7 @@
 # Skeleton for Agent class
 import random
 import numpy as np
-from enum import Enum, auto
 from dataclasses import dataclass
-from typing import List, Tuple, Dict, Optional, Any
 
 MOVEMENT_DIRECTIONS = np.array([
     [1, 0],
@@ -14,10 +12,8 @@ MOVEMENT_DIRECTIONS = np.array([
 MAX_SHIP_FIRE_RANGE = 8
 
 DOOMSDAY = 777
-COMBAT_DIST = 10
+COMBAT_DIST = 7
 
-
-### STATE
 @dataclass
 class Ship:
     """
@@ -54,16 +50,12 @@ class Ship:
 
 @dataclass
 class Planet:
-    """
-    Class representing a planet in the game
-    """
     pos_x: int
     pos_y: int
     occupation: int  # -1: unoccupied, 0: player 1, 100: player 2, 1-99: contested
     
     @classmethod
     def from_tuple(cls, planet_tuple):
-        """Create a Planet instance from a tuple representation"""
         return cls(
             pos_x=planet_tuple[0],
             pos_y=planet_tuple[1],
@@ -155,12 +147,11 @@ class Agent:
                 if dist <= COMBAT_DIST:
                     attacking_enemy_ship = Ship.from_tuple(enemy_ship)
             if attacking_enemy_ship is not None:
-                print("ENTERING COMBAT! DIE!!!")
                 action = combat(Ship.from_tuple(ship), attacking_enemy_ship)
                 if action is not None:
                     ship_actions.append(action)
             # EXTERMINATE 
-            elif self.turn >= DOOMSDAY:
+            elif self.turn >= DOOMSDAY and ship[0] not in [1, 2]:
                 direction = 0
                 ship_x = ship[1]
                 ship_y = ship[2]
@@ -216,12 +207,12 @@ def combat(our_ship: Ship, enemy_ship: Ship):
             return (our_ship.ship_id, 1, direction)
     # do random thing if safe
     if enemy_ship.fire_cooldown != 0 or target_direction(enemy_ship, our_ship) is None:
-        return (our_ship.ship_id, 0, random.randint(0, 3), 3)
+        # return (our_ship.ship_id, 0, random.randint(0, 3), 3)
+        return None
     for direction in range(4):
         target_location = np.array([our_ship.pos_x, our_ship.pos_y], dtype=int) + MOVEMENT_DIRECTIONS[direction]
         # move to safe location
         if target_direction(enemy_ship, our_ship) is None:
             return (our_ship.ship_id, 0, target_location, 1)
     # no safe moves - do default
-    return (our_ship.ship_id, 0, random.randint(0, 3), 3)
-
+    return None

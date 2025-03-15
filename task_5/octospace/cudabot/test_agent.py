@@ -1,6 +1,9 @@
 # Skeleton for Agent class
 
 class Agent:
+    def __init__(self, side):
+        pass
+        
     def get_action(self, obs: dict) -> dict:
         game_map = obs["map"]
         allied_ships = obs["allied_ships"]
@@ -94,7 +97,7 @@ class Agent:
         """
         pass
 
-def defensive_agent(friendly_ship, enemy_ships, base_position, is_base_captured, base_hp, side, defender_id):
+def defensive_agent(friendly_ship, enemy_ships, base_position, is_base_captured, base_hp, side):
 
     ship_id, x, y, hp, firing_cooldown, move_cooldown = friendly_ship
 
