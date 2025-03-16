@@ -52,7 +52,7 @@ def aggressive_combat(our_ship: Ship, enemy_ship: Ship):
             # shoot enemy
             return (our_ship.ship_id, 1, direction)
         else:
-            return our_ship.go_to(enemy_ship.pos_x, enemy_ship.pos_y)
+            return our_ship.simple_go_to(enemy_ship.pos_x, enemy_ship.pos_y)
     # dodge
     if enemy_ship.fire_cooldown == 0:
         for direction in range(4):
@@ -62,7 +62,7 @@ def aggressive_combat(our_ship: Ship, enemy_ship: Ship):
             if target_direction(enemy_ship, fake_ship) is None:
                 return (our_ship.ship_id, 0, direction, 1)
 
-    return our_ship.go_to(enemy_ship.pos_x, enemy_ship.pos_y)
+    return our_ship.simple_go_to(enemy_ship.pos_x, enemy_ship.pos_y)
 
 class CombatTask:
 

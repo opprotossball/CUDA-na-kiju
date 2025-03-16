@@ -110,9 +110,9 @@ class ExploreTask:
     #     self.game_state = game_state
 
 
-    def command(self, state, exploring_ships, ship_actions):
+    def command(self, map, state, exploring_ships, ship_actions):
         for ship in exploring_ships:
             coords = find_planet(state, ship)
-            action = ship.go_to(coords[0], coords[1])
+            action = ship.go_to(map, coords[0], coords[1])
             ship_actions.append(action)
         return ship_actions

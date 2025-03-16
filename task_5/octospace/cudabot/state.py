@@ -61,9 +61,23 @@ class Ship:
             direction= 3
         return [self.ship_id,0,direction,3]
 
+
     # origin is a tuple (x, y)
     # game_map is in the original format received from the game engine
 
+    def simple_go_to(self, target_x, target_y):
+        direction = 0
+        if self.pos_x > target_x:
+            direction= 0
+        elif self.pos_x < target_x:
+            direction= 2
+        elif self.pos_y > target_y:
+            direction= 1
+        elif self.pos_y < target_y:
+            direction= 3
+        else:
+            return [self.ship_id, 0, 0, 0]
+        return [self.ship_id,0,direction,3]
 
 @dataclass
 class Planet:
