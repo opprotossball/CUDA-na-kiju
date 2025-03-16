@@ -48,7 +48,7 @@ class Brain:
                     defending_ships.append(ship)
 
         ship_actions = []
-        self.defender.command(defending_ships, ship_actions)
+        self.defender.command(state, defending_ships, ship_actions)
         self.fighter.command(state, combating_ships, ship_actions)
         self.exterminator.command(attacking_ships, ship_actions)
         self.conquer.command(conquering_ships, ship_actions)

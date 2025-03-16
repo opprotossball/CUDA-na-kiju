@@ -8,21 +8,19 @@ class DefendTask:
         self.side = side
         self.base_position = [9,9] if side == 0 else [90,90]
     
-    def command(self, ships, ship_actions):
+    def command(self, state, ships, ship_actions):
+        _, _, is_base_captured, base_hp = state.return_state()
         for ship in ships:
             move = defensive_agent(ship, self.base_position, is_base_captured, base_hp, self.side)
             ship_actions.append(move)
         return ship_actions
 
 def defensive_agent(ship, base_position, is_base_captured, base_hp, side):
-
-    ship_id, x, y, hp, firing_cooldown, move_cooldown = ship
-
     if(is_base_captured==-1 or (base_hp<50 and is_base_captured==0)): #baza zajmowana -> broń bazy
         #print("chuj1")
         return ship.go_to(ship,base_position)
 
-    if(hp<60): #and no enemies nearby
+    if(ship.hp<60): #and no enemies nearby
         #print("chuj2")
         return ship.go_to(ship, base_position)
 
