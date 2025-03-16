@@ -1,8 +1,17 @@
+import numpy as np
 # Skeleton for Agent class
+MOVEMENT_DIRECTIONS = np.array([
+    [1, 0],
+    [0, 1],
+    [-1, 0],
+    [0, -1]
+], dtype=np.int8)
 
+MAX_SHIP_FIRE_RANGE = 8
 class Agent:
     def __init__(self, side):
-        pass
+        self.side = side
+        self.turn = 0
         
     def get_action(self, obs: dict) -> dict:
         game_map = obs["map"]
@@ -53,14 +62,16 @@ class Agent:
         :return:
         """
         moves=[]
-        base_position=[9,9]
+        if (self.side==0):
+            base_position=[9,9]
+        else:
+            base_position = [90, 90]
         is_base_captured=1
         base_hp=100
-        side=0
         for ship in allied_ships:
-            move=defensive_agent(ship, enemy_ships, base_position, is_base_captured, base_hp, side)
+            move=defensive_agent(ship, enemy_ships, base_position, is_base_captured, base_hp, self.side)
             moves.append(move)
-            print(move)
+            #print(move)
 
 
         return {
@@ -106,15 +117,15 @@ def defensive_agent(friendly_ship, enemy_ships, base_position, is_base_captured,
         #return
 
     if(is_base_captured==-1 or (base_hp<50 and is_base_captured==0)): #baza zajmowana -> broń bazy
-        print("chuj1")
+        #print("chuj1")
         return go_to(friendly_ship,base_position)
 
     if(hp<60): #and no enemies nearby
-        print("chuj2")
+        #print("chuj2")
         return go_to(friendly_ship, base_position)
 
     if(True): #na spawnie jeśli nie ma wrogów wychodzi trochę od bazy żeby pilnować
-        print("chuj3")
+        #print("chuj3")
         base_x, base_y = base_position
 
         if(side == 0):

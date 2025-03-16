@@ -10,7 +10,10 @@ class Agent:
         
     def get_action(self, obs: dict) -> dict:
         self.turn += 1
+        print(self.turn)
+
         state = GameState(obs, None, self.side)
+        print(f"Ships: {len(state.allied_ships)}")
         ship_actions = self.brain.command(state, self.turn)
         return {
             "ships_actions": ship_actions,
