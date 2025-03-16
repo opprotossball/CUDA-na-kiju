@@ -138,9 +138,11 @@ class GameState:
             "resources": self.resources
         }
         base_status = 1 # 1: base is 100% hp, -1: base was just attacked, 0: base is less than 100% hp, but the hp didn't change
+        current_base_hp = 100
         if self.previous_state is not None:
             for planet in self.previous_state["planets_occupation"]:
                 base_coords = 9 if self.side == 0 else 90
+
                 if planet[0] == base_coords and planet[1] == base_coords:
                     current_base_hp = current_state["planets_occupation"][0][2]
                     previous_base_hp = planet[2]
@@ -148,5 +150,4 @@ class GameState:
                         base_status = -1
                     elif current_base_hp < 100:
                         base_status = 0
-                    
-        return self.updating_map, current_state, base_status
+        return self.updating_map, current_state, base_status, current_base_hp
