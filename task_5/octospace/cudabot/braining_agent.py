@@ -16,7 +16,7 @@ class Agent:
         state = GameState(obs, None, self.side)
         state.return_state()
         print(f"Ships: {len(state.allied_ships)}")
-        ship_actions = self.brain.command(state, self.turn)
+        ship_actions = self.brain.command(state, self.turn,obs)
         return {
             "ships_actions": ship_actions,
             "construction": 10

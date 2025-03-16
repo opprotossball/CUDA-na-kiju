@@ -14,7 +14,7 @@ class Brain:
         self.conquer = ConquerTask(side)
         self.explore = ExploreTask(side)
 
-    def command(self, state, turn):
+    def command(self, state, turn, obs):
 
         combating_ships = []
         defending_ships = []
@@ -41,11 +41,11 @@ class Brain:
                     exploring_ships.append(ship) # TODO!!!!!!!
                 else:
                     defending_ships.append(ship)
-
+        map=obs["map"]
         ship_actions = []
-        self.defender.command(state, defending_ships, ship_actions)
+        self.defender.command(map,state, defending_ships, ship_actions)
         self.fighter.command(state, combating_ships, ship_actions)
-        self.conquer.command(conquering_ships, ship_actions)
+        self.conquer.command(map,conquering_ships, ship_actions)
         self.explore.command(exploring_ships, ship_actions)
         return ship_actions
     

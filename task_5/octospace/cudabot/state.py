@@ -40,8 +40,10 @@ class Ship:
                 (self.pos_y - other_ship.pos_y) ** 2) ** 0.5
 
     def go_to(self, game_map, target_x, target_y, search_size=15):
-        origin = [self.pos_x, self.pos_y]
-        target = [target_x, target_y]
+        origin = (self.pos_x, self.pos_y)
+        target = (target_x, target_y)
+        if (origin==target):
+            return [self.ship_id,0,0,0]
         prev, new_origin, new_target = find_shortest_paths(game_map, origin, target, search_size)
         path = []
         while new_target != new_origin:
