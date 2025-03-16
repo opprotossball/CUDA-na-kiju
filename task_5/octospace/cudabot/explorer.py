@@ -289,6 +289,7 @@ class DefendTask:
         return ship_actions
 
 def defensive_agent(map,ship, base_position, guard_position, is_base_captured, base_hp, side):
+    print(f"base h: {base_hp}")
     if(base_hp<50): #baza zajmowana -> broń bazy
         return ship.go_to(map,base_position[0], base_position[1])
 
