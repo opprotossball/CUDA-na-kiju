@@ -289,7 +289,7 @@ class DefendTask:
         return ship_actions
 
 def defensive_agent(map,ship, base_position, guard_position, is_base_captured, base_hp, side):
-    print(f"base h: {base_hp}")
+    #print(f"base h: {base_hp}")
     if(base_hp<50): #baza zajmowana -> broń bazy
         return ship.go_to(map,base_position[0], base_position[1])
 
@@ -562,6 +562,11 @@ class Agent:
         self.brain = Brain(side)
         self.turn = 0
         #self.prev_state = None
+
+    def is_begging(self, obs):
+        if(self.turn>100 and obs["resources"]==[100,100,100,100], len(obs["allied_ships"])==1):
+            self.turn=0
+        return
         
     def get_action(self, obs: dict) -> dict:
         self.turn += 1
