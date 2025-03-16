@@ -6,7 +6,7 @@ class DefendTask:
     def __init__(self, side):
         self.guard_points = LEFT_GUARD_POINTS if side == 0 else RIGHT_GUARD_POINTS
         self.side = side
-        self.base_position = [9,9] if side == 0 else [90,90]
+        self.base_position = [9, 9] if side == 0 else [90, 90]
     
     def command(self, state, ships, ship_actions):
         _, _, is_base_captured, base_hp = state.return_state()
