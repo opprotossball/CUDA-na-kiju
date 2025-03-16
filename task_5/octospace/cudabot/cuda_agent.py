@@ -1,4 +1,5 @@
 ### STATE
+import random
 from enum import Enum, auto
 from dataclasses import dataclass
 from typing import List, Tuple, Dict, Optional, Any
@@ -39,7 +40,7 @@ class Ship:
         return ((self.pos_x - other_ship.pos_x) ** 2 +
                 (self.pos_y - other_ship.pos_y) ** 2) ** 0.5
 
-    def go_to(self, game_map, target_x, target_y, search_size=15):
+    def go_to(self, game_map, target_x, target_y, search_size=10):
         origin = (self.pos_x, self.pos_y)
         target = (target_x, target_y)
         if (origin==target):
@@ -475,6 +476,9 @@ def find_planet(GameState, ship):
             if unknown_tiles:
                 furthest_tile = min(unknown_tiles, key=lambda coord: abs(ship.pos_x - coord[0]) + abs(ship.pos_y - coord[1]))
                 closest_x, closest_y = furthest_tile
+                if random.random() > 0.75:
+                    closest_x = random.randint(0, 99)                
+                    closest_y = random.randint(0, 99)                
             else:
                 # Fallback to predefined spots if no unknown tiles exist
                 spot_index = ship.ship_id % len(GOOD_SPOTS_TO_CHECK)
@@ -485,7 +489,6 @@ def find_planet(GameState, ship):
             closest_y = min(height - 1, max(0, closest_y))
 
     final_coords = (closest_x, closest_y)
-    
     return final_coords
 
 class ExploreTask:
@@ -505,7 +508,7 @@ class ExploreTask:
 ### BRAIN
 
 class Brain:
-    DOOMSDAY = 1700
+    DOOMSDAY = 1500
     COMBAT_DIST = 7
 
     def __init__(self, side):
@@ -542,7 +545,7 @@ class Brain:
             elif self.exploring_ship is None or self.exploring_ship == ship.ship_id or self.exploring_ship not in ship_ids:
                 self.exploring_ship = ship.ship_id
                 exploring_ships.append(ship) 
-            elif turn >= Brain.DOOMSDAY: #and ship.ship_id % 2==0:
+            elif turn >= Brain.DOOMSDAY and ship.ship_id not in ship_ids[:2]:
                 conquering_ships.append(ship)
             else:
                 defending_ships.append(ship)
@@ -560,11 +563,14 @@ class Agent:
         self.side = side
         self.brain = Brain(side)
         self.turn = 0
-        #self.prev_state = None
+
+    def is_beggining(self, obs):
+        if(self.turn>100 and list(obs["resources"])==[100,100,100,100] and len(obs["allied_ships"])==1):
+            self.turn=0
         
     def get_action(self, obs: dict) -> dict:
         self.turn += 1
-
+        self.is_beggining(obs)
         state = GameState(obs, None, self.side)
         state.return_state()
         ship_actions = self.brain.command(state, self.turn,obs)

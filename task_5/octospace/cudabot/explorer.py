@@ -540,13 +540,14 @@ class Brain:
                     conquering_ships.append(ship)
                 else:
                     combating_ships.append(ship)
-            elif self.exploring_ship is None or self.exploring_ship == ship.ship_id or self.exploring_ship not in ship_ids:
-                self.exploring_ship = ship.ship_id
-                exploring_ships.append(ship) 
+            # elif self.exploring_ship is None or self.exploring_ship == ship.ship_id or self.exploring_ship not in ship_ids:
+            #     self.exploring_ship = ship.ship_id
+            #     exploring_ships.append(ship) 
             elif turn >= Brain.DOOMSDAY: #and ship.ship_id % 2==0:
                 conquering_ships.append(ship)
             else:
-                defending_ships.append(ship)
+                exploring_ships.append(ship)
+                #defending_ships.append(ship)
         map = obs["map"]
         ship_actions = []
         self.defender.command(map,state, defending_ships, ship_actions)
