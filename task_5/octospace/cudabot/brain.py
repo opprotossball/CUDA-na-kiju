@@ -46,6 +46,6 @@ class Brain:
         self.defender.command(state, defending_ships, ship_actions)
         self.fighter.command(state, combating_ships, ship_actions)
         self.conquer.command(conquering_ships, ship_actions)
-        self.explore.command(exploring_ships, ship_actions)
+        self.explore.command(state, exploring_ships, ship_actions)
         return ship_actions
     
