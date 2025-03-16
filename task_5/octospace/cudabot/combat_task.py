@@ -1,4 +1,4 @@
-COMBAT_DIST = 7
+COMBAT_DIST = 9
 import numpy as np
 from cudabot.state import Ship
 import random
@@ -40,9 +40,29 @@ def combat(our_ship: Ship, enemy_ship: Ship):
     for direction in range(4):
         target_location = np.array([our_ship.pos_x, our_ship.pos_y], dtype=int) + MOVEMENT_DIRECTIONS[direction]
         # move to safe location
-        if target_direction(enemy_ship, our_ship) is None:
+        fake_ship = Ship.from_tuple((999, target_location[0], target_location[1], 100, 0, 0))
+        if target_direction(enemy_ship, fake_ship) is None:
             return (our_ship.ship_id, 0, direction, 1)
     return None
+
+def aggressive_combat(our_ship: Ship, enemy_ship: Ship):
+    if our_ship.fire_cooldown == 0:
+        direction = target_direction(our_ship, enemy_ship)
+        if direction is not None:
+            # shoot enemy
+            return (our_ship.ship_id, 1, direction)
+        else:
+            return our_ship.go_to(enemy_ship.pos_x, enemy_ship.pos_y)
+    # dodge
+    if enemy_ship.fire_cooldown == 0:
+        for direction in range(4):
+            target_location = np.array([our_ship.pos_x, our_ship.pos_y], dtype=int) + MOVEMENT_DIRECTIONS[direction]
+            # move to safe location
+            fake_ship = Ship.from_tuple((999, target_location[0], target_location[1], 100, 0, 0))
+            if target_direction(enemy_ship, fake_ship) is None:
+                return (our_ship.ship_id, 0, direction, 1)
+
+    return our_ship.go_to(enemy_ship.pos_x, enemy_ship.pos_y)
 
 class CombatTask:
 
@@ -57,7 +77,7 @@ class CombatTask:
                 if dist <= COMBAT_DIST:
                     attacking_enemy_ship = enemy_ship
             if attacking_enemy_ship is not None:
-                action = combat(ship, attacking_enemy_ship)
+                action = aggressive_combat(ship, attacking_enemy_ship)
                 if action is not None:
                     ship_actions.append(action)
         return ship_actions
