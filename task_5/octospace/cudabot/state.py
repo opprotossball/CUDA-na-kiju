@@ -35,6 +35,20 @@ class Ship:
         """Calculate distance to another ship"""
         return ((self.pos_x - other_ship.pos_x) ** 2 + 
                 (self.pos_y - other_ship.pos_y) ** 2) ** 0.5
+    
+    def go_to(self, target_x, target_y):
+        if target_x > self.pos_x:
+            direction = 0
+        elif target_x < self.pos_x:
+            direction = 2
+        elif target_y > self.pos_y:
+            direction = 1
+        elif target_y < self.pos_y:
+            direction = 3
+        else:
+            # stay in place
+            return (self.ship_id, 0, 0, 0)
+        return (self.ship_id, 0, direction, 3)
 
 @dataclass
 class Planet:
