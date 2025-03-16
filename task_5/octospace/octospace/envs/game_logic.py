@@ -564,3 +564,4 @@ def _delete_ship(
 
     if turn_on_music:
         play_ship_explosion_sound(volume=volume)
+

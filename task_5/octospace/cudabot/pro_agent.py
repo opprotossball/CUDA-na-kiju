@@ -1,13 +1,8 @@
 # Skeleton for Agent class
 
 class Agent:
-    def __init__(self, side: int):
-        """
-        :param side: Indicates whether the player is on left side (0) or right side (1)
-        """
-        self.side = side
-
     def get_action(self, obs: dict) -> dict:
+        print()
         """
         Main function, which gets called during step() of the environment.
 
@@ -51,9 +46,11 @@ class Agent:
         :return:
         """
 
+        #move = {"action_type":0,"ship_id":0,"direction":2,"speed":1}
+        move = [1,0,2,1]
         return {
-            "ships_actions": [],
-            "construction": 0
+            "ships_actions": [[1,0,2,1],[0,0,2,1],[2,0,2,1]],
+            "construction": 3
         }
 
 

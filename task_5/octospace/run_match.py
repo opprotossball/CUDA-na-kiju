@@ -20,7 +20,6 @@ def get_parser():
     return parser
 
 
-
 def run_match(
         n_matches: int,
         agent_1_path: str,
@@ -32,7 +31,6 @@ def run_match(
     # Disable warnings in the gym
     if not verbose:
         gym.logger.min_level = 40
-
 
     player_1_id = 46
     player_2_id = 47
