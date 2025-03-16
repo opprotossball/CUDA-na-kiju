@@ -7,12 +7,14 @@ class Agent:
         self.side = side
         self.brain = Brain(side)
         self.turn = 0
+        #self.prev_state = None
         
     def get_action(self, obs: dict) -> dict:
         self.turn += 1
         print(self.turn)
 
         state = GameState(obs, None, self.side)
+        state.return_state()
         print(f"Ships: {len(state.allied_ships)}")
         ship_actions = self.brain.command(state, self.turn)
         return {

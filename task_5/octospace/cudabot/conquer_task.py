@@ -4,7 +4,7 @@ RIGHT_BASE = [9,9]
 class ConquerTask:
 
     def __init__(self, side):
-        self.target = RIGHT_BASE if side == 0 else LEFT_BASE
+        self.target = RIGHT_BASE if side == 1 else LEFT_BASE
 
     def command(self, ships, ship_actions):
         for ship in ships:

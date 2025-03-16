@@ -150,4 +150,5 @@ class GameState:
                         base_status = -1
                     elif current_base_hp < 100:
                         base_status = 0
-        return self.updating_map, current_state, base_status, current_base_hp
+        self.previous_state = current_state
+        return self.updating_map, self.previous_state, base_status, current_base_hp

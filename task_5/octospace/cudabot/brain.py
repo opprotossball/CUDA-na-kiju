@@ -3,7 +3,6 @@ from cudabot.defend_task import DefendTask
 from cudabot.conquer_task import ConquerTask
 from cudabot.combat_task import CombatTask
 from cudabot.explore_task import ExploreTask
-from cudabot.exterminate_task import ExterminateTask
 
 class Brain:
     DOOMSDAY = 100
@@ -12,7 +11,6 @@ class Brain:
     def __init__(self, side):
         self.defender = DefendTask(side)
         self.fighter = CombatTask(side)
-        self.exterminator = ExterminateTask(side)
         self.conquer = ConquerTask(side)
         self.explore = ExploreTask(side)
 
@@ -36,11 +34,8 @@ class Brain:
                     conquering_ships.append(ship)
                 else:
                     combating_ships.append(ship)
-            elif turn >= Brain.DOOMSDAY and ship.ship_id % 3==0:
-                if (ship.ship_id % 2 == 0 and ship.fire_cooldown):
-                    conquering_ships.append(ship)
-                else:
-                    attacking_ships.append(ship)
+            elif turn >= Brain.DOOMSDAY and ship.ship_id % 2==0:
+                conquering_ships.append(ship)
             else:
                 if(False):
                     exploring_ships.append(ship) # TODO!!!!!!!
@@ -50,7 +45,6 @@ class Brain:
         ship_actions = []
         self.defender.command(state, defending_ships, ship_actions)
         self.fighter.command(state, combating_ships, ship_actions)
-        self.exterminator.command(attacking_ships, ship_actions)
         self.conquer.command(conquering_ships, ship_actions)
         self.explore.command(exploring_ships, ship_actions)
         return ship_actions
