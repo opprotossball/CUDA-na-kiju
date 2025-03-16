@@ -201,7 +201,6 @@ def target_direction(ship: Ship, target: Ship):
 def combat(our_ship: Ship, enemy_ship: Ship):
     if our_ship.fire_cooldown == 0:
         direction = target_direction(our_ship, enemy_ship)
-        print(f"target direction: {direction}")
         if direction is not None:
             # shoot enemy
             return (our_ship.ship_id, 1, direction)

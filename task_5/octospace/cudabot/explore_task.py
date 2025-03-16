@@ -45,15 +45,15 @@ def find_planet(GameState, ship):
     else:
         # Search through the entire game map
         resource_fields = []
-        for y in range(height):
-            for x in range(width):
-                tile = GameState.game_map[y, x]
-                # Skip tiles in homebase area if we're side 0
-                if GameState.side == 0 and [x, y] in homebase_area:
-                    continue
-                # Check if tile is not -1
-                if (tile & 1) == 1 and (tile & 56) != 0 and tile != -1:
-                    resource_fields.append([x, y, tile])
+        # for y in range(height):
+        #     for x in range(width):
+        #         tile = GameState.game_map[y, x]
+        #         # Skip tiles in homebase area if we're side 0
+        #         if GameState.side == 0 and [x, y] in homebase_area:
+        #             continue
+        #         # Check if tile is not -1
+        #         if (tile & 1) == 1 and (tile & 56) != 0 and tile != -1:
+        #             resource_fields.append([x, y, tile])
         # Find the closest point among resource fields
         if resource_fields:
             for field in resource_fields:
@@ -95,6 +95,6 @@ class ExploreTask:
     def command(self, state, exploring_ships, ship_actions):
         for ship in exploring_ships:
             coords = find_planet(state, ship)
-            action = ship.go_to(coords)
+            action = ship.go_to(coords[0], coords[1])
             ship_actions.append(action)
         return ship_actions

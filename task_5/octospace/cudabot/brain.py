@@ -5,8 +5,9 @@ from cudabot.combat_task import CombatTask
 from cudabot.explore_task import ExploreTask
 
 class Brain:
-    DOOMSDAY = 100
+    DOOMSDAY = 1500
     COMBAT_DIST = 7
+
 
     def __init__(self, side):
         self.defender = DefendTask(side)
@@ -14,11 +15,12 @@ class Brain:
         self.conquer = ConquerTask(side)
         self.explore = ExploreTask(side)
 
+        self.exploring_ship = None
+
     def command(self, state, turn):
 
         combating_ships = []
         defending_ships = []
-        attacking_ships = []
         conquering_ships = []
         exploring_ships = []
 
@@ -34,13 +36,13 @@ class Brain:
                     conquering_ships.append(ship)
                 else:
                     combating_ships.append(ship)
-            elif turn >= Brain.DOOMSDAY and ship.ship_id % 2==0:
+            elif self.exploring_ship is None or self.exploring_ship == ship.ship_id:
+                self.exploring_ship = ship.ship_id
+                exploring_ships.append(ship) 
+            elif turn >= Brain.DOOMSDAY: #and ship.ship_id % 2==0:
                 conquering_ships.append(ship)
             else:
-                if(False):
-                    exploring_ships.append(ship) # TODO!!!!!!!
-                else:
-                    defending_ships.append(ship)
+                defending_ships.append(ship)
 
         ship_actions = []
         self.defender.command(state, defending_ships, ship_actions)

@@ -16,7 +16,7 @@ class DefendTask:
         return ship_actions
 
 def defensive_agent(ship, base_position, guard_position, is_base_captured, base_hp, side):
-    print(f"base hp: {base_hp}")
+    return (ship.ship_id, 0, 0, 0)
     if(is_base_captured==-1 or (base_hp<50 and is_base_captured==0)): #baza zajmowana -> broń bazy
         return ship.go_to(base_position[0], base_position[1])
 
@@ -25,3 +25,4 @@ def defensive_agent(ship, base_position, guard_position, is_base_captured, base_
 
     if(True): #na spawnie jeśli nie ma wrogów wychodzi trochę od bazy żeby pilnować
         return ship.go_to(guard_position[0], guard_position[1])
+    
