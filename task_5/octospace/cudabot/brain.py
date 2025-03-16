@@ -32,7 +32,7 @@ class Brain:
                 if dist <= Brain.COMBAT_DIST:
                     attacked = True
             if attacked:
-                if (turn >= Brain.DOOMSDAY and """ship.ship_id % 2 == 0 """and ship.fire_cooldown>0):
+                if (turn >= Brain.DOOMSDAY and ship.fire_cooldown>0):
                     conquering_ships.append(ship)
                 else:
                     combating_ships.append(ship)

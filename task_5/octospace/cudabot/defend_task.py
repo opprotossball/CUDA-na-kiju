@@ -18,17 +18,17 @@ class DefendTask:
 def defensive_agent(ship, base_position, is_base_captured, base_hp, side):
     if(is_base_captured==-1 or (base_hp<50 and is_base_captured==0)): #baza zajmowana -> broń bazy
         #print("chuj1")
-        return ship.go_to(ship,base_position)
+        return ship.go_to(**base_position)
 
     if(ship.hp<60): #and no enemies nearby
         #print("chuj2")
-        return ship.go_to(ship, base_position)
+        return ship.go_to(**base_position)
 
     if(True): #na spawnie jeśli nie ma wrogów wychodzi trochę od bazy żeby pilnować
         #print("chuj3")
         base_x, base_y = base_position
 
         if(side == 0):
-            return ship.go_to(ship,[base_x+5,base_y+5])
+            return ship.go_to(base_x+5, base_y+5)
         else:
-            return ship.go_to(ship,[base_x-5,base_y-5])
+            return ship.go_to(base_x-5, base_y-5)
