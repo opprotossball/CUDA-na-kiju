@@ -299,7 +299,7 @@ def defensive_agent(map,ship, base_position, guard_position, is_base_captured, b
     if(True): #na spawnie jeśli nie ma wrogów wychodzi trochę od bazy żeby pilnować
         return ship.go_to(map,base_position[0], base_position[1])
 
-COMBAT_DIST = 9
+COMBAT_DIST = 6
 MOVEMENT_DIRECTIONS = np.array([
     [1, 0],
     [0, 1],
@@ -442,17 +442,21 @@ def find_planet(GameState, ship):
         closest_y, closest_x = closest_field[0], closest_field[1]
     else:
         # Search through the entire game map
-        if resource_cache is None:
-            resource_cache = []
-            for y in range(height):
-                for x in range(width):
-                    tile = GameState.game_map[y, x]
-                    # Skip tiles in homebase area if we're side 0
-                    if GameState.side == 0 and [x, y] in homebase_area:
-                        continue
-                    # Check if tile is not -1
-                    if (tile & 1) == 1 and (tile & 56) != 0 and tile != -1:
-                        resource_cache.append([x, y, tile])
+        if GameState.side == 0:
+            if resource_cache is None:
+                resource_cache = []
+                for y in range(height):
+                    for x in range(width):
+                        tile = GameState.game_map[y, x]
+                        # Skip tiles in homebase area if we're side 0
+                        if GameState.side == 0 and [x, y] in homebase_area:
+                            continue
+                        # Check if tile is not -1
+                        if (tile & 1) == 1 and (tile & 56) != 0 and tile != -1:
+                            resource_cache.append([x, y, tile])
+        else:
+            spot_index = ship.ship_id % len(GOOD_SPOTS_TO_CHECK)
+            closest_x, closest_y = GOOD_SPOTS_TO_CHECK[spot_index]
         # Find the closest point among resource fields
         if resource_cache:
             for field in resource_cache:
@@ -468,26 +472,29 @@ def find_planet(GameState, ship):
         else:
             # Use predefined good spots to explore
             # Use ship ID to distribute ships among different spots
-            unknown_tiles = []
-            for y in range(height):
-                for x in range(width):
-                    if GameState.game_map[y, x] == -1:
-                        unknown_tiles.append((x, y))
-            if unknown_tiles:
-                furthest_tile = min(unknown_tiles, key=lambda coord: abs(ship.pos_x - coord[0]) + abs(ship.pos_y - coord[1]))
-                closest_x, closest_y = furthest_tile
-                if random.random() > 0.75:
-                    closest_x = random.randint(0, 99)                
-                    closest_y = random.randint(0, 99)                
-            else:
-                # Fallback to predefined spots if no unknown tiles exist
+            if GameState.side == 0:
+                unknown_tiles = []
+                for y in range(height):
+                    for x in range(width):
+                        if GameState.game_map[y, x] == -1:
+                            unknown_tiles.append((x, y))
+                if unknown_tiles:
+                    furthest_tile = min(unknown_tiles, key=lambda coord: abs(ship.pos_x - coord[0]) + abs(ship.pos_y - coord[1]))
+                    closest_x, closest_y = furthest_tile
+                    if random.random() > 0.75:
+                        closest_x = random.randint(0, 99)                
+                        closest_y = random.randint(0, 99)                
+                else:
+                    # Fallback to predefined spots if no unknown tiles exist
+                    spot_index = ship.ship_id % len(GOOD_SPOTS_TO_CHECK)
+                    closest_x, closest_y = GOOD_SPOTS_TO_CHECK[spot_index]
+                
+                # Ensure coordinates are within map bounds
+                closest_x = min(width - 1, max(0, closest_x))
+                closest_y = min(height - 1, max(0, closest_y))
+            else: 
                 spot_index = ship.ship_id % len(GOOD_SPOTS_TO_CHECK)
                 closest_x, closest_y = GOOD_SPOTS_TO_CHECK[spot_index]
-            
-            # Ensure coordinates are within map bounds
-            closest_x = min(width - 1, max(0, closest_x))
-            closest_y = min(height - 1, max(0, closest_y))
-
     final_coords = (closest_x, closest_y)
     return final_coords
 
@@ -509,7 +516,7 @@ class ExploreTask:
 
 class Brain:
     DOOMSDAY = 1500
-    COMBAT_DIST = 7
+    COMBAT_DIST = 6
 
     def __init__(self, side):
         self.defender = DefendTask(side)

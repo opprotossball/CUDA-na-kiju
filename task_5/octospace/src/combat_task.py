@@ -1,6 +1,6 @@
 COMBAT_DIST = 9
 import numpy as np
-from cudabot.state import Ship
+from src.state import Ship
 import random
 
 MOVEMENT_DIRECTIONS = np.array([

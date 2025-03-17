@@ -1,6 +1,6 @@
 # Skeleton for Agent class
 import random
-from cudabot.state import Ship
+from src.state import Ship
 
 def enemy_home(home):
     return 9 if home == 90 else 90

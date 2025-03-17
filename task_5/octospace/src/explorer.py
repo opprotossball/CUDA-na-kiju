@@ -1,4 +1,3 @@
-
 class ExplorerAgent:
     def __init__(self):
         self.step = 0

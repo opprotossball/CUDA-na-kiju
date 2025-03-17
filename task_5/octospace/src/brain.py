@@ -1,8 +1,8 @@
-from cudabot.state import Ship, GameState
-from cudabot.defend_task import DefendTask
-from cudabot.conquer_task import ConquerTask
-from cudabot.combat_task import CombatTask
-from cudabot.explore_task import ExploreTask
+from src.state import Ship, GameState
+from src.defend_task import DefendTask
+from src.conquer_task import ConquerTask
+from src.combat_task import CombatTask
+from src.explore_task import ExploreTask
 
 class Brain:
     DOOMSDAY = 1500
